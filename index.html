@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<style>
+    body{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 97vh;
+    }
+    .data{
+
+    }
+</style>
+<body>
+    <div class="data">
+        <p> Temperature: <span>--</span></p>
+        <p> Humidity: <span>--</span></p>
+        <p> Door Status: <span>--</span></p>
+        <p> Smoke Status: <span>--</span></p>
+        <p> Luminosity Status: <span>--</span></p>
+        <p> Humidity: <span>--</span></p>
+    </div>
+
+
+
+    <script>
+        const socket = new WebSocket('ws://localhost:8080');
+        socket.addEventListener('open', (event) => {
+            socket.send('Hello Server!');
+        });
+        socket.addEventListener('message', (event) => {
+            console.log('Message from server ', event.data);
+        });
+    </script>
+</body>
+</html>
