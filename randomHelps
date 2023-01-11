@@ -1,0 +1,20 @@
+
+        // gasValue
+        // humidityValue
+        // isLocked
+        // ledInVal
+        // ledOutVal
+        // lightAutomation
+        // temperatureValue
+        // isNIGHT
+
+    updateState({
+        "isNIGHT": 0,
+        "temperatureValue": 24,
+        "humidityValue": 43,
+        "gasValue": 1,
+        "lightAutomation": 1,
+        "ledOutVal": 1,
+        "ledInVal": 0,
+        "isLocked": 1
+    })

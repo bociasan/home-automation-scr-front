@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<style>
+    body{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 97vh;
+    }
+    .data{
+        width: 170px;
+    }
+</style>
+<body>
+    <div class="data">
+        <p> Temperature: <span id="temperature">--</span></p>
+        <p> Humidity: <span id="humidity">--</span></p>
+        <p> Door status: <span id="isLocked">--</span></p>
+        <p> Smoke status: <span id="gasValue">--</span></p>
+        <p> Luminosity status: <span id="isNIGHT">--</span></p>
+        <p> Light automation: <span id="lightAutomation">--</span></p>
+        <p> Indoor light: <span id="ledIn">--</span></p>
+        <br></br>
+        <button id="button-led-in-on">On</button>
+        <button id="button-led-in-off">OFF</button>
+
+        <p> Outdoor light: <span id="ledOut">--</span></p>
+<!--        <button id="doorButton">Flip</button>-->
+        <button id="lock">Lock</button>
+        <button id="unlock">Unlock</button>
+        <br></br>
+        <button id="auto">Auto</button>
+        <button id="manual">Manual</button>
+
+
+    </div>
+
+    <script>
+        {
+            // gasValue
+            // humidityValue
+            // isLocked
+            // ledInVal
+            // ledOutVal
+            // lightAutomation
+            // temperatureValue
+            // isNIGHT
+
+            // gasValue, humidityValue, isLocked, ledInVal, ledOutVal, lightAutomation, temperatureValue, isNIGHT
+        }
+        (function attachOnclick(){
+            document.getElementById("lock").onclick = ()=> ws.send('lockDoor');
+            document.getElementById("unlock").onclick = ()=> ws.send('unlockDoor');
+            document.getElementById("auto").onclick = ()=> ws.send('automationOn');
+            document.getElementById("manual").onclick = ()=> ws.send('automationOff');
+        })()
+
+        function updateState(state){
+            document.getElementById('temperature').innerText = state.temperatureValue
+            document.getElementById('humidity').innerText = state.humidityValue
+            document.getElementById('isLocked').innerText = state.isLocked ? 'locked' : 'unlocked'
+            document.getElementById('gasValue').innerText = state.gasValue ? 'no' : 'detected'
+            document.getElementById('isNIGHT').innerText = state.isNIGHT ? 'night' : 'day'
+            document.getElementById('lightAutomation').innerText = state.lightAutomation ? 'auto' : 'manual'
+            document.getElementById('ledIn').innerText = state.ledInVal ? 'on' : 'off'
+            document.getElementById('ledOut').innerText = state.ledOutVal ? 'on' : 'off'
+        }
+
+        const ws = new WebSocket(`ws://${window.location.hostname}/ws`);
+
+        ws.onmessage = (webSocketMessage) => {
+            console.log(webSocketMessage.data)
+            const messageBody = JSON.parse(webSocketMessage.data);
+            const {type, state} = messageBody
+            // console.log(messageBody)
+
+            switch (type){
+                case 'getState':
+                    // console.log(state)
+                    updateState(state)
+            }
+        };
+
+        ws.onopen = (event) => {
+            console.log("Openned")
+            ws.send("getState");
+
+        }
+        ws.onclose = (event) => {
+            console.log("Closed")
+        }
+    </script>
+</body>
+</html>
